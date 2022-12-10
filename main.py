@@ -14,6 +14,9 @@ from folium import Marker
 from folium.plugins import MarkerCluster
 from folium.plugins import HeatMap
 from streamlit_folium import folium_static
+from folium import Circle
+
+import calendar 
 
 #
 # Configuración de la página
@@ -29,3 +32,11 @@ st.markdown('Esta aplicación presenta visualizaciones tabulares, gráficas y ge
 st.markdown('El usuario debe seleccionar un archivo CSV basado en el DwC y posteriormente elegir una de las especies con datos contenidos en el archivo. **El archivo debe estar separado por tabuladores**. Este tipo de archivos puede obtenerse, entre otras formas, en el portal de la [Infraestructura Mundial de Información en Biodiversidad (GBIF)](https://www.gbif.org/).')
 st.markdown('La aplicación muestra un conjunto de tablas, gráficos y mapas correspondientes a la distribución de la especie en el tiempo y en el espacio.')
 
+# Carga de datos 
+felinos = pd.read_csv("felinos.csv", sep=";", encoding="iso-8859-1")
+
+cantones = gpd.read_file("datos/cantones.geojson")
+cantones
+
+provincias = gpd.read_file("datos/provincias.geojson")
+provincias
