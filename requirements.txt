@@ -1,5 +1,7 @@
-plotly
-pygeos
+streamlit
+pandas
 geopandas
+plotly
 folium
 streamlit-folium
+rtree
