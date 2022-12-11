@@ -42,16 +42,16 @@ st.markdown('La aplicación muestra un conjunto de tablas, gráficos y mapas cor
 #
 
 # Carga de datos subidos por el usuario
-datos_usuarios = st.sidebar.file_uploader('Seleccione un archivo CSV que siga el estándar DwC')
+archivo_registros_presencia = st.sidebar.file_uploader('Seleccione un archivo CSV que siga el estándar DwC')
 
 # Se continúa con el procesamiento solo si hay un archivo de datos cargado
-if datos_usuarios is not None:
+if archivo_registros_presencia is not None:
     # Carga de registros de presencia en un dataframe con nombre de "registros"
-    registros = pd.read_csv(datos_usuarios, delimiter='\t', encoding="iso-8859-1")
+    registros_presencia = pd.read_csv(archivo_registros_presencia, delimiter='\t', encoding="iso-8859-1")
     # Conversión del dataframe de registros de presencia a geodataframe, identifica en código las columnas de las coordenadas
-    registros = gpd.GeoDataFrame(registros, 
-                                           geometry=gpd.points_from_xy(registros.decimalLongitude, 
-                                                                       registros.decimalLatitude),
+    registros_presencia = gpd.GeoDataFrame(archivo_registros_presencia, 
+                                           geometry=gpd.points_from_xy(registros_presencia.decimalLongitude, 
+                                                                       registros_presencia.decimalLatitude),
                                            crs='EPSG:4326')
 
 
@@ -62,7 +62,7 @@ if datos_usuarios is not None:
 
     # Limpieza de datos
     # Eliminación de registros con valores nulos en la columna 'species'
-    registros = registros[registros['species'].notna()]
+    registros = registros_presencia[registros_presencia['species'].notna()]
     # Cambio del tipo de datos del campo de fecha
     registros["eventDate"] = pd.to_datetime(registros["eventDate"])
 
