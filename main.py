@@ -10,6 +10,8 @@ import streamlit as st
 import pandas as pd
 import geopandas as gpd
 
+gpd.__version__
+
 import plotly.express as px
 
 import folium
