@@ -49,7 +49,7 @@ if archivo_registros_presencia is not None:
     # Carga de registros de presencia en un dataframe con nombre de "registros"
     registros_presencia = pd.read_csv(archivo_registros_presencia, delimiter='\t', encoding="iso-8859-1")
     # Conversión del dataframe de registros de presencia a geodataframe, identifica en código las columnas de las coordenadas
-    registros_presencia = gpd.GeoDataFrame(archivo_registros_presencia, 
+    registros_presencia = gpd.GeoDataFrame(registros_presencia, 
                                            geometry=gpd.points_from_xy(registros_presencia.decimalLongitude, 
                                                                        registros_presencia.decimalLatitude),
                                            crs='EPSG:4326')
