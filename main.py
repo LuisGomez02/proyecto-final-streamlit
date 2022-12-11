@@ -2,22 +2,21 @@
 # Autor: Luis Gómez Mantilla (Luiscarlosgomez2000@gmail.com)
 # Fecha de creación: 2022-12-9
 
-#Version:3.1  =   commit 
 
+#Carga de bibliotecas
 
 import streamlit as st
 
 import pandas as pd
 import geopandas as gpd
 
-
-import plotly.express as px
-
 import folium
 from folium import Marker
 from folium.plugins import MarkerCluster
 from folium.plugins import HeatMap
 from streamlit_folium import folium_static
+
+import plotly.express as px
 
 import math
 
@@ -57,7 +56,7 @@ if archivo_registros_presencia is not None:
 
 
     # Carga de geojson de los cantones
-    canton = gpd.read_file("datos/cantones.geojson")
+    canton = gpd.read_file("datos/canton.geojson")
 
 
 
@@ -86,7 +85,7 @@ if archivo_registros_presencia is not None:
     canton_contienen_registros = canton.sjoin(registros_presencia, how="left", predicate="contains")
     # Conteo de registros de presencia en cada provincia
     canton_registros = canton_contienen_registros.groupby("CODNUM").agg(cantidad_registros_presencia = ("gbifID","count"))
-    can_registros = canton_registros.reset_index() # para convertir la serie a dataframe
+    canton_registros = canton_registros.reset_index() # para convertir a dataframe
 
 
 
@@ -94,12 +93,12 @@ if archivo_registros_presencia is not None:
     # SALIDAS ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     #
 
-    # Tabla de registros de presencia (modifica la primer tabla que se muestra en la aplicación web)
+    # Tabla de registros de presencia
     st.header('Registros de presencia de especies')
-    st.dataframe(registros_presencia[['species', 'stateProvince', 'locality','eventDate']].rename(columns = {'species':'Especie', 'stateProvince':'Provincia', 'locality':'Localidad', 'eventDate':'Fecha'}))
+    st.dataframe(registros_presencia[['eventDate','species', 'stateProvince', 'locality']].rename(columns = {'eventDate':'Fecha_y_Hora', 'species':'Especie', 'stateProvince':'Provincia', 'locality':'Localidad'}))
 
 
-    # Definición de columnas de la parte visual de nuestra aplicación, dividará el contenido en dos columnas
+    # Definición de columnas de la parte visual de nuestra aplicación en dos columnas
     col1, col2 = st.columns(2)
     col3 = st.columns(1)
 
@@ -109,13 +108,13 @@ if archivo_registros_presencia is not None:
     canton_registros = canton_registros.join(canton.set_index('CODNUM'), on='CODNUM', rsuffix='_b')
     # Dataframe filtrado para usar en graficación
     canton_registros_grafico = canton_registros.loc[canton_registros['cantidad_registros_presencia'] > 0, 
-                                                            ["provincia", "cantidad_registros_presencia"]].sort_values("cantidad_registros_presencia", ascending=True) #.head(20)
+                                                            ["provincia", "cantidad_registros_presencia"]].sort_values("cantidad_registros_presencia", ascending=True) 
     canton_registros_grafico = canton_registros_grafico.set_index('provincia')  
 
 
     with col1:
-        # Gráficos de historial de registros de presencia por año
-        st.header('Historial de registros por provincia')
+        # Gráficos de registros de presencia por provincias
+        st.header('Registros por provincia por provincia')
 
         fig = px.bar(canton_registros_grafico, 
                     labels={'provincia':'Provincia', 'cantidad_registros_presencia':'Registros de presencia'})    
@@ -133,8 +132,8 @@ if archivo_registros_presencia is not None:
     canton_registros_grafico = canton_registros_grafico.set_index('NCANTON')  
 
     with col2:
-        # Gráficos de historial de registros de presencia por año
-        st.header('Historial de registros por cantón')
+        # Gráficos de registros de presencia por canton
+        st.header('Registros de presencia por cantón')
 
         fig = px.bar(canton_registros_grafico, 
                     labels={'NCANTON':'Cantón', 'cantidad_registros_presencia':'a'})    
@@ -143,7 +142,7 @@ if archivo_registros_presencia is not None:
         st.plotly_chart(fig)
 
     with col1:
-        # Mapas de coropletas
+        # Mapas de coropletas de presencia de especies por provincia, cantón y agrupados
         st.header('Mapa de registros de presencia de especies por provincia, cantón y agrupados')
        
         # Capa base
@@ -188,7 +187,7 @@ if archivo_registros_presencia is not None:
         m.add_child(mc)
 
         
-        prov_map = folium.Choropleth(
+        provincia_map = folium.Choropleth(
             name="Mapa de coropletas de los registros por provincia",
             geo_data=canton,
             data=canton_registros,
@@ -201,7 +200,7 @@ if archivo_registros_presencia is not None:
             legend_name='Cantidad de registros de presencia por provincia',
             smooth_factor=0).add_to(m)
 
-        folium.GeoJsonTooltip(['NCANTON', 'provincia']).add_to(prov_map.geojson)
+        folium.GeoJsonTooltip(['NCANTON', 'provincia']).add_to(provincia_map.geojson)
 
         # Control de capas
         folium.LayerControl().add_to(m) 
