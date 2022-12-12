@@ -6,7 +6,7 @@ Para efectos de este trabajo, se utilizaron los registros de presencia de felino
 
 De acuerdo a los resultados, en la tabla se muestra la columna de *locality* en su mayoría vacía, no se pudo tener control sobre ello debido a que así vienen los datos. Y en el mapa final, a pesar de utilizar los mismos datos de los gráficos para su realización, muestra resultados distintos.
 
-[Enlace de visualización de Streamlit](http://192.168.100.9:8501/)
+[Enlace de visualización de Streamlit](https://luisgomez02-proyecto-final-streamlit-main-igvdbv.streamlit.app/)
 
 *Los datos fueron tomados de:*
 - Para las divisiones territoriales fueron datos tomados del [SNIT](https://www.snitcr.go.cr/ico_servicios_ogc_info?k=bm9kbzo6MjY=&nombre=IGN%20Cartograf%C3%ADa%201:5mil)
