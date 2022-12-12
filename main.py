@@ -1,5 +1,6 @@
 # Aplicación desarrollada en Streamlit para visualización de datos de biodiversidad
-# Autor: Luis Gómez Mantilla (Luiscarlosgomez2000@gmail.com)
+# Autores: Luis Gómez Mantilla (Luiscarlosgomez2000@gmail.com)
+#          Marget Aracelly Martínez (margetmartinez@gmail.com)
 # Fecha de creación: 2022-12-9
 
 
